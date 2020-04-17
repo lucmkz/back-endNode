@@ -1,4 +1,5 @@
 const express = require("express");
+const { uuid } = require("uuidv4");
 
 const app = express();
 
@@ -21,22 +22,27 @@ app.use(express.json());
  * Request Body: JSON
  */
 
-app.get("/projects", (request, response) => {
-  const query = request.query; // Para verificar os query params
-  console.log(query);
+const projects = [];
 
-  return response.json(["projeto1", "projeto2"]);
+app.get("/projects", (request, response) => {
+  // const query = request.query; // Para verificar os query params
+  // console.log(query);
+
+  return response.json(projects);
 });
 
 app.post("/projects", (request, response) => {
-  const body = request.body;
-  console.log(body);
+  const { title, owner } = request.body;
 
-  return response.json(["projeto1", "projeto2", "projeto3"]);
+  const project = { id: uuid(), title, owner };
+
+  projects.push(project);
+
+  return response.json(project);
 });
 
 app.put("/projects/:id", (request, response) => {
-  const params = request.params; // para pegar o id do route params
+  const { id } = request.params;
 
   console.log(params);
   return response.json(["projeto4", "projeto2", "projeto3"]);
