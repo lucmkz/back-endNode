@@ -22,9 +22,30 @@ app.use(express.json());
  * Request Body: JSON
  */
 
+/**
+ * Middleware
+ *
+ * Interceptador de requisições que interrompe totalmente uma request
+ * ou alterar os dados da requisição
+ */
+
 const projects = [];
 
-app.get("/projects", (request, response) => {
+function logRequests(request, response, next) {
+  const { method, url } = request;
+
+  const logLabel = `[${method.toUpperCase()}] ${url}`;
+
+  console.time(logLabel);
+
+  next();
+
+  console.timeEnd(logLabel);
+}
+
+// app.use(logRequests);
+
+app.get("/projects", logRequests, (request, response) => {
   // const query = request.query; // Para verificar os query params
   // console.log(query);
 
